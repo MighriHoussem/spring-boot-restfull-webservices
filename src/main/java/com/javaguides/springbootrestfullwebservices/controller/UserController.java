@@ -1,5 +1,6 @@
 package com.javaguides.springbootrestfullwebservices.controller;
 
+import com.javaguides.springbootrestfullwebservices.dto.UserDTO;
 import com.javaguides.springbootrestfullwebservices.entity.User;
 import com.javaguides.springbootrestfullwebservices.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -22,33 +23,33 @@ public class UserController {
     //create user API REST
     @PostMapping("create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user){
         System.out.println("Create User: " + user.getEmail());
 
-        User user1 = this.userService.createUser(user);
-        return new ResponseEntity<>(user1, HttpStatus.CREATED);
+        UserDTO savedUserDTO = this.userService.createUser(user);
+        return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
 
     //REST API get user by id
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById (@PathVariable Long id) {
-        User user =  this.userService.getUserById(id);
+    public ResponseEntity<UserDTO> getUserById (@PathVariable Long id) {
+        UserDTO user =  this.userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     //REST API get all users
     @GetMapping("all")
-    public ResponseEntity<List<User>> getAllUsers () {
+    public ResponseEntity<List<UserDTO>> getAllUsers () {
         return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
     }
 
 
     //REST API update user by id
     @PutMapping("{id}/update")
-    public ResponseEntity<User> updateUserInfos(@PathVariable Long id,
-            @RequestBody User user) {
-        User updatedUser = this.userService.updateUserInfos(user);
+    public ResponseEntity<UserDTO> updateUserInfos(@PathVariable Long id,
+            @RequestBody UserDTO user) {
+        UserDTO updatedUser = this.userService.updateUserInfos(user);
         return ResponseEntity.ok(updatedUser);
     }
 
