@@ -2,6 +2,8 @@ package com.javaguides.springbootrestfullwebservices.service;
 
 import com.javaguides.springbootrestfullwebservices.dto.UserDTO;
 import com.javaguides.springbootrestfullwebservices.entity.User;
+import com.javaguides.springbootrestfullwebservices.exception.EmailAlreadyExistException;
+import com.javaguides.springbootrestfullwebservices.exception.ResourceNotFoundException;
 import com.javaguides.springbootrestfullwebservices.mapper.UserMapper;
 import com.javaguides.springbootrestfullwebservices.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,12 @@ public class UserService {
 
         //User user = UserMapper.convertToUserEntity(userDTO);
 
+        Optional<User> existedUser = this.userRepository.findByEmail(user.getEmail());
+
+        if(existedUser.isPresent()) {
+            throw new EmailAlreadyExistException("Email already exists for new User!");
+        }
+
         User savedUser = this.userRepository.save(user);
         //convert User JPA Entity to UserDTO Object
         UserDTO savedUserDTO = this.modelMapper.map(savedUser, UserDTO.class);
@@ -39,10 +47,14 @@ public class UserService {
     }
 
     public UserDTO getUserById(Long id) {
-        Optional<User> user =  this.userRepository.findById(id);
+        User user =  this.userRepository.findById(id).orElseThrow(
+                () -> {
+                    return new ResourceNotFoundException("User", "id", id);
+                }
+        );
         //UserDTO userDTO = UserMapper.convertToUserDTO(user.get());
 
-        UserDTO userDTO = this.modelMapper.map(user.get(), UserDTO.class);
+        UserDTO userDTO = this.modelMapper.map(user, UserDTO.class);
         return userDTO;
     }
 
@@ -58,7 +70,11 @@ public class UserService {
     }
 
     public UserDTO updateUserInfos (UserDTO user) {
-        User user1 =  this.userRepository.findById(user.getId()).get();
+        User user1 =  this.userRepository.findById(user.getId()).orElseThrow(
+                () -> {
+                    return new ResourceNotFoundException("User", "id", user.getId());
+                }
+        );
         user1.setFirstName(user.getFirstName());
         user1.setLastName(user.getLastName());
         user1.setEmail(user.getEmail());

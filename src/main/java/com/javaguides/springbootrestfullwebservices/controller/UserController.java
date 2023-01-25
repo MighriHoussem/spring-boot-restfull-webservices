@@ -2,11 +2,15 @@ package com.javaguides.springbootrestfullwebservices.controller;
 
 import com.javaguides.springbootrestfullwebservices.dto.UserDTO;
 import com.javaguides.springbootrestfullwebservices.entity.User;
+import com.javaguides.springbootrestfullwebservices.exception.ErrorDetails;
+import com.javaguides.springbootrestfullwebservices.exception.ResourceNotFoundException;
 import com.javaguides.springbootrestfullwebservices.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,4 +62,5 @@ public class UserController {
     public ResponseEntity<String> deleteUserByID (@PathVariable("id") Long userID){
         return new ResponseEntity<>(this.userService.deleteUserById(userID) , HttpStatus.OK);
     }
+
 }
