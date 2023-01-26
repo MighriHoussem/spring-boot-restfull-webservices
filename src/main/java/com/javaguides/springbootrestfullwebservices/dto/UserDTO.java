@@ -1,10 +1,25 @@
 package com.javaguides.springbootrestfullwebservices.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class UserDTO {
 
     private Long id;
+
+    //user firstName should not be null / empty
+    @NotEmpty(message = "user lastName should not be null / empty")
     private String firstName;
+
+    //user lastName should not be null / empty
+    @NotEmpty(message = "user lastName should not be null / empty")
     private String lastName;
+
+    //user email should not be null / empty
+    //user email should be a valid email
+    @NotEmpty(message = "user email should not be null / empty")
+    @Email(message = "user email should be a valid email")
     private String email;
 
     public UserDTO(Long id, String firstName, String lastName, String email) {

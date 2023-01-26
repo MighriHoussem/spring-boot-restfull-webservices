@@ -5,6 +5,7 @@ import com.javaguides.springbootrestfullwebservices.entity.User;
 import com.javaguides.springbootrestfullwebservices.exception.ErrorDetails;
 import com.javaguides.springbootrestfullwebservices.exception.ResourceNotFoundException;
 import com.javaguides.springbootrestfullwebservices.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class UserController {
     //create user API REST
     @PostMapping("create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user){
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO user){
         System.out.println("Create User: " + user.getEmail());
 
         UserDTO savedUserDTO = this.userService.createUser(user);
@@ -52,7 +53,7 @@ public class UserController {
     //REST API update user by id
     @PutMapping("{id}/update")
     public ResponseEntity<UserDTO> updateUserInfos(@PathVariable Long id,
-            @RequestBody UserDTO user) {
+            @RequestBody @Valid UserDTO user) {
         UserDTO updatedUser = this.userService.updateUserInfos(user);
         return ResponseEntity.ok(updatedUser);
     }
